@@ -23,14 +23,15 @@
   "dependencies": {},
   "devDependencies": {
     "bower": "*",
-    "karma": "*",
-    "karma-chrome-launcher": "*",
-    "karma-jasmine": "*",
     "grunt": "*",
     "grunt-cli": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*"
+    "grunt-contrib-uglify": "*",
+    "jasmine-core": "^2.8.0",
+    "karma": "*",
+    "karma-chrome-launcher": "*",
+    "karma-jasmine": "*"
   },
   "scripts": {
     "test": "karma start test/karma.conf.js --single-run --browsers Chrome",

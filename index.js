@@ -183,7 +183,7 @@
         traceDebuggingMode = !!enableTraceDebugging;
         return this;
       };
-      
+
       // Enable reading page url from route object
       this.readFromRoute = function(val) {
         readFromRoute = !!val;
@@ -193,7 +193,7 @@
       /**
        * Public Service
        */
-      this.$get = ['$document', // To read page title 
+      this.$get = ['$document', // To read page title
                    '$location', //
                    '$log',      //
                    '$rootScope',//
@@ -220,26 +220,30 @@
           }
           return isPropertyDefined('name', config) ? (config.name + '.' + commandName) : commandName;
         };
-        
+
         // Try to read route configuration and log warning if not possible
         var $route = {};
         if (readFromRoute) {
-          if (!$injector.has('$route')) {
-            $log.warn('$route service is not available. Make sure you have included ng-route in your application dependencies.');
-          } else {
+          if ($injector.has('$route')) {
             $route = $injector.get('$route');
+          }
+          else if ($injector.has('$state')) {
+            $route = $injector.get('$state');
+          }
+          else {
+            $log.warn('routing service is not available. Make sure you have included ng-route or ui-route in your application dependencies.');
           }
         }
 
-        // Get url for current page 
+        // Get url for current page
         var getUrl = function () {
           // Using ngRoute provided tracking urls
           if (readFromRoute && $route.current && ('pageTrack' in $route.current)) {
             return $route.current.pageTrack;
           }
-           
+
           // Otherwise go the old way
-          var url = trackUrlParams ? $location.url() : $location.path(); 
+          var url = trackUrlParams ? $location.url() : $location.path();
           return removeRegExp ? url.replace(removeRegExp, '') : url;
         };
 
@@ -1090,11 +1094,11 @@
             if (readFromRoute) {
               // Avoid tracking undefined routes, routes without template (e.g. redirect routes)
               // and those explicitly marked as 'do not track'
-              if (!$route.current || !$route.current.templateUrl || $route.current.doNotTrack) {
+              if (!$route.current || !($route.current.templateUrl || $route.current.template) || $route.current.doNotTrack) {
                 return;
               }
             }
-            
+
             that._trackPage();
           });
         }
